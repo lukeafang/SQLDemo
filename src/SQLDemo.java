@@ -17,6 +17,7 @@ public class SQLDemo
 		mySQL.setPassword("123");
 		mySQL.setDatabaseName("user_system");//Name of data base
 		
+		String cmdStr = "";
 		//initial
 		if( mySQL.initial() == false )
 		{
@@ -29,9 +30,7 @@ public class SQLDemo
 			System.out.println(mySQL.getErrorMessage());
 		}	
 		
-		
 		//create table
-		String cmdStr = "";
 		cmdStr = "create table mytable(name char(10),id int);";
 		if( mySQL.insertData_raw(cmdStr) == false )
 		{
@@ -40,10 +39,20 @@ public class SQLDemo
 		}		
 		System.out.println("create table finished");
 		
-		//insert Value
+		//insert Value by raw cmd
+		String name = "Hello";
+		String idStr = "1";
+		cmdStr = "insert into mytable(name, id) values(\"" + name + "\", " + idStr + ");";
+		if( mySQL.insertData_raw(cmdStr) == false )
+		{
+			System.out.println(mySQL.getErrorMessage());
+			return;				
+		}		
+		
+		//insert Value by function
 		String tableName = "mytable";
 		Object[] valueList = new Object[2];
-		valueList[0] = new String("ABC");
+		valueList[0] = new String("World");
 		valueList[1] = new Integer(2);
 		if( mySQL.insertData(tableName, valueList) == false )
 		{
@@ -69,8 +78,7 @@ public class SQLDemo
 				System.out.println("name\t\tID\t\t"); 
 				while(result.next())
 				{ 
-				    System.out.println(result.getString("name")+"\t\t"+ 
-				    		result.getInt("id")+"\t\t");     
+				    System.out.println(result.getString("name")+"\t\t"+ result.getInt("id")+"\t\t");     
 				}		
 			}
 			catch(SQLException ignore) 
